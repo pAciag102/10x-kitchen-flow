@@ -1,143 +1,183 @@
-### KitchenFlow
+# Supabase CLI
 
-[![Version](https://img.shields.io/badge/version-0.0.1-blue)](#project-status)
-[![Node](https://img.shields.io/badge/node-22.14.0-339933)](.nvmrc)
-[![Astro](https://img.shields.io/badge/Astro-5-%23FF5D01)](https://astro.build)
-[![React](https://img.shields.io/badge/React-19-61DAFB)](https://react.dev)
-[![License](https://img.shields.io/badge/license-TBD-lightgrey)](#license)
+[![Coverage Status](https://coveralls.io/repos/github/supabase/cli/badge.svg?branch=main)](https://coveralls.io/github/supabase/cli?branch=main) [![Bitbucket Pipelines](https://img.shields.io/bitbucket/pipelines/supabase-cli/setup-cli/master?style=flat-square&label=Bitbucket%20Canary)](https://bitbucket.org/supabase-cli/setup-cli/pipelines) [![Gitlab Pipeline Status](https://img.shields.io/gitlab/pipeline-status/sweatybridge%2Fsetup-cli?label=Gitlab%20Canary)
+](https://gitlab.com/sweatybridge/setup-cli/-/pipelines)
 
+[Supabase](https://supabase.io) is an open source Firebase alternative. We're building the features of Firebase using enterprise-grade open source tools.
 
-#### Table of contents
+This repository contains all the functionality for Supabase CLI.
 
-- [Project name](#project-name)
-- [Project description](#project-description)
-- [Tech stack](#tech-stack)
-- [Getting started locally](#getting-started-locally)
-- [Available scripts](#available-scripts)
-- [Project scope](#project-scope)
-- [Project status](#project-status)
-- [License](#license)
+- [x] Running Supabase locally
+- [x] Managing database migrations
+- [x] Creating and deploying Supabase Functions
+- [x] Generating types directly from your database schema
+- [x] Making authenticated HTTP requests to [Management API](https://supabase.com/docs/reference/api/introduction)
 
+## Getting started
 
-### Project name
+### Install the CLI
 
-KitchenFlow
-
-
-### Project description
-
-KitchenFlow is a web utility app that centralizes home recipe management and automates shopping list planning. The app leverages AI to normalize free‑form ingredient text into structured data, aggregate ingredients across planned recipes, and assist during cooking with context‑aware substitutions. It is designed Mobile‑First for shopping and cooking views, with full desktop functionality for planning.
-
-Key capabilities:
-- Add recipes manually or import from a URL (scraping).
-- Human‑in‑the‑loop AI ingredient normalization into Name, Quantity, Unit.
-- Meal planner with drag & drop to days or a general “To plan” column.
-- Intelligent shopping list that aggregates normalized ingredients across planned recipes.
-- Cooking assistant for context‑aware substitutions per ingredient.
-- Supabase Auth and RLS‑based data isolation.
-
-For full product details and user stories, see the PRD: `.ai/prd.md`.
-
-
-### Tech stack
-
-- Frontend: Astro 5 + React 19, TypeScript 5
-- Styling: Tailwind CSS 4, Shadcn/ui, Lucide Icons
-- AI: OpenRouter.ai (model provider abstraction)
-- Backend/Platform: Supabase (PostgreSQL, Auth, SDK, RLS)
-- Tooling: ESLint, Prettier, Husky + lint-staged
-- CI/CD & Hosting: GitHub Actions, DigitalOcean (Docker image)
-
-References: `.ai/stack.md`, `package.json`.
-
-
-### Getting started locally
-
-Prerequisites:
-- Node.js 22.14.0 (see `.nvmrc`)
-- npm (project uses `package-lock.json`)
-
-Setup:
+Available via [NPM](https://www.npmjs.com) as dev dependency. To install:
 
 ```bash
-# 1) Use the correct Node version
-nvm use
-
-# 2) Install dependencies
-npm ci
-
-# 3) Start the dev server
-npm run dev
-
-# Astro typically runs at http://localhost:4321
+npm i supabase --save-dev
 ```
 
-Production build and preview:
+To install the beta release channel:
 
 ```bash
-npm run build
-npm run preview
+npm i supabase@beta --save-dev
 ```
 
-Notes:
-- Future features will require environment variables (e.g., Supabase, OpenRouter). They are not yet required for the base UI scaffold.
-- If you use a different Node manager, match the version in `.nvmrc` (22.14.0).
+When installing with yarn 4, you need to disable experimental fetch with the following nodejs config.
 
+```
+NODE_OPTIONS=--no-experimental-fetch yarn add supabase
+```
 
-### Available scripts
+> **Note**
+For Bun versions below v1.0.17, you must add `supabase` as a [trusted dependency](https://bun.sh/guides/install/trusted) before running `bun add -D supabase`.
 
-From `package.json`:
+<details>
+  <summary><b>macOS</b></summary>
 
-- `dev`: Start the Astro dev server.
-- `build`: Build the production site.
-- `preview`: Preview the production build locally.
-- `astro`: Run the Astro CLI directly.
-- `lint`: Run ESLint across the project.
-- `lint:fix`: Run ESLint with autofix.
-- `format`: Run Prettier formatting.
+  Available via [Homebrew](https://brew.sh). To install:
 
+  ```sh
+  brew install supabase/tap/supabase
+  ```
 
-### Project scope
+  To install the beta release channel:
+  
+  ```sh
+  brew install supabase/tap/supabase-beta
+  brew link --overwrite supabase-beta
+  ```
+  
+  To upgrade:
 
-In scope (MVP):
-- Recipe management: add manually and via URL import (scraping), edit, delete.
-- AI ingredient normalization with human verification and manual fallback.
-- Meal planner with drag & drop between days and general pool.
-- Intelligent shopping list with aggregation by normalized name and unit.
-- Cooking assistant for context‑aware substitutions per ingredient.
-- Authentication via Supabase Auth; data isolation via RLS.
+  ```sh
+  brew upgrade supabase
+  ```
+</details>
 
-Out of scope (MVP boundaries):
-- No native mobile apps (Web app/PWA only).
-- No advanced home pantry/inventory tracking.
-- No social features (e.g., feed/following/likes) in the initial release.
-- No integrated payments (free tier with fixed/renewable AI limits).
+<details>
+  <summary><b>Windows</b></summary>
 
-See full details and acceptance criteria in `.ai/prd.md`.
+  Available via [Scoop](https://scoop.sh). To install:
 
+  ```powershell
+  scoop bucket add supabase https://github.com/supabase/scoop-bucket.git
+  scoop install supabase
+  ```
 
-### Project status
+  To upgrade:
 
-Version: `0.0.1` (early development)
+  ```powershell
+  scoop update supabase
+  ```
+</details>
 
-Planned features and user stories (selection):
-- US‑001: Registration and login with Supabase Auth and RLS verification.
-- US‑002: Seed data on first login to avoid the empty state.
-- US‑003: Import recipe from URL (scraping).
-- US‑004: AI ingredient normalization with human‑in‑the‑loop verification.
-- US‑005: Delete recipe with impact warning for shopping list.
-- US‑006: Meal planning with drag & drop.
-- US‑007: Aggregated shopping list by normalized ingredient and unit.
-- US‑008: Mobile‑friendly shopping list with large tap targets and persisted state.
-- US‑009: Context‑aware substitution suggestions via AI.
+<details>
+  <summary><b>Linux</b></summary>
 
-For the comprehensive roadmap and acceptance criteria, see `.ai/prd.md`.
+  Available via [Homebrew](https://brew.sh) and Linux packages.
 
+  #### via Homebrew
 
-### License
+  To install:
 
-License: To be determined.
+  ```sh
+  brew install supabase/tap/supabase
+  ```
 
-Until a license file is added, all rights are reserved by the repository owner. If you plan to open‑source this project, consider adding a license from `https://choosealicense.com` and updating this section and badge accordingly.
+  To upgrade:
 
+  ```sh
+  brew upgrade supabase
+  ```
 
+  #### via Linux packages
+
+  Linux packages are provided in [Releases](https://github.com/supabase/cli/releases). To install, download the `.apk`/`.deb`/`.rpm`/`.pkg.tar.zst` file depending on your package manager and run the respective commands.
+
+  ```sh
+  sudo apk add --allow-untrusted <...>.apk
+  ```
+
+  ```sh
+  sudo dpkg -i <...>.deb
+  ```
+
+  ```sh
+  sudo rpm -i <...>.rpm
+  ```
+
+  ```sh
+  sudo pacman -U <...>.pkg.tar.zst
+  ```
+</details>
+
+<details>
+  <summary><b>Other Platforms</b></summary>
+
+  You can also install the CLI via [go modules](https://go.dev/ref/mod#go-install) without the help of package managers.
+
+  ```sh
+  go install github.com/supabase/cli@latest
+  ```
+
+  Add a symlink to the binary in `$PATH` for easier access:
+
+  ```sh
+  ln -s "$(go env GOPATH)/bin/cli" /usr/bin/supabase
+  ```
+
+  This works on other non-standard Linux distros.
+</details>
+
+<details>
+  <summary><b>Community Maintained Packages</b></summary>
+
+  Available via [pkgx](https://pkgx.sh/). Package script [here](https://github.com/pkgxdev/pantry/blob/main/projects/supabase.com/cli/package.yml).
+  To install in your working directory:
+
+  ```bash
+  pkgx install supabase
+  ```
+
+  Available via [Nixpkgs](https://nixos.org/). Package script [here](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/tools/supabase-cli/default.nix).
+</details>
+
+### Run the CLI
+
+```bash
+supabase bootstrap
+```
+
+Or using npx:
+
+```bash
+npx supabase bootstrap
+```
+
+The bootstrap command will guide you through the process of setting up a Supabase project using one of the [starter](https://github.com/supabase-community/supabase-samples/blob/main/samples.json) templates.
+
+## Docs
+
+Command & config reference can be found [here](https://supabase.com/docs/reference/cli/about).
+
+## Breaking changes
+
+We follow semantic versioning for changes that directly impact CLI commands, flags, and configurations.
+
+However, due to dependencies on other service images, we cannot guarantee that schema migrations, seed.sql, and generated types will always work for the same CLI major version. If you need such guarantees, we encourage you to pin a specific version of CLI in package.json.
+
+## Developing
+
+To run from source:
+
+```sh
+# Go >= 1.22
+go run . help
+```
