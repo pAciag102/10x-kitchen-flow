@@ -15,6 +15,8 @@ pnpm-debug.log*
 
 # environment variables
 .env
+.env.local
+.env.development
 .env.production
 
 # macOS-specific files
@@ -22,3 +24,8 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# supabase - ignore only sensitive and temporary files
+supabase/.branches/
+supabase/.temp/
+supabase/seed.sql
